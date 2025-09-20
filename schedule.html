@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Backend Developer Roadmap Calendar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Modern scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(156, 163, 175, 0.5);
+            border-radius: 3px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(156, 163, 175, 0.8);
+        }
+        
+        /* Hide scrollbar for Firefox */
+        html {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
+        }
+        
+        /* Slide down animation */
+        .animate-slide-down {
+            animation: slideDown 0.3s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    animation: {
+                        'pulse-gentle': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gradient-to-br from-blue-500 via-purple-600 to-indigo-700 min-h-screen flex items-center justify-center p-2 overflow-hidden">
+    <div class="w-full h-screen max-w-6xl bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col">
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-slate-800 to-blue-600 text-white p-3 text-center flex-shrink-0">
+            <h1 class="text-xl md:text-2xl font-bold mb-1 animate-pulse-gentle">🐍 Python Backend Developer Journey</h1>
+            <p class="text-xs md:text-sm opacity-90">Your 29-week roadmap to becoming a professional backend developer</p>
+        </div>
+        
+        <!-- Controls -->
+        <div class="px-4 py-2 bg-gray-50 border-b border-gray-200 flex flex-col md:flex-row justify-between items-center gap-2 flex-shrink-0">
+            <div class="flex items-center gap-3">
+                <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg font-semibold transition-all duration-300 hover:scale-105 text-xs" onclick="previousMonth()">← Previous</button>
+                <span class="text-base md:text-lg font-bold text-slate-800" id="currentMonth">January 2024</span>
+                <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg font-semibold transition-all duration-300 hover:scale-105 text-xs" onclick="nextMonth()">Next →</button>
+                <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-lg font-semibold transition-all duration-300 hover:scale-105 text-xs" onclick="toggleCurriculum()">📚 Curriculum</button>
+            </div>
+            
+            <div class="flex flex-wrap gap-3 justify-center">
+                <div class="flex items-center gap-1.5 text-xs">
+                    <div class="w-3 h-3 bg-blue-100 rounded-full border border-white shadow-sm"></div>
+                    <span class="text-gray-700">Learning Tasks</span>
+                </div>
+                <div class="flex items-center gap-1.5 text-xs">
+                    <div class="w-3 h-3 bg-orange-100 rounded-full border border-white shadow-sm"></div>
+                    <span class="text-gray-700">Milestone Projects</span>
+                </div>
+                <div class="flex items-center gap-1.5 text-xs">
+                    <div class="w-3 h-3 bg-green-100 rounded-full border border-white shadow-sm"></div>
+                    <span class="text-gray-700">Phase Start</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Calendar Content -->
+        <div class="flex-1 overflow-y-auto p-3">
+            <!-- Curriculum Panel (Hidden by default) -->
+            <div id="curriculumPanel" class="hidden mb-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-200 shadow-lg">
+                <div class="p-4">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="text-lg font-bold text-slate-800">📚 Complete Curriculum Overview</h3>
+                        <button onclick="toggleCurriculum()" class="text-gray-500 hover:text-gray-700">✕</button>
+                    </div>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
+                        <div class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-green-500">
+                            <h4 class="font-semibold text-green-800 mb-2">Phase 1: Python Fundamentals (Weeks 1-6)</h4>
+                            <ul class="text-xs space-y-1 text-gray-700">
+                                <li>• Variables, data types, control structures</li>
+                                <li>• Functions, OOP, file handling</li>
+                                <li>• Testing, Git, virtual environments</li>
+                                <li>• Projects: Calculator, Finance Tracker, Library System</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-blue-500">
+                            <h4 class="font-semibold text-blue-800 mb-2">Phase 2: Web Foundations (Weeks 7-11)</h4>
+                            <ul class="text-xs space-y-1 text-gray-700">
+                                <li>• HTTP, REST APIs, JSON</li>
+                                <li>• Flask basics, routes, templates</li>
+                                <li>• SQL, databases, SQLAlchemy</li>
+                                <li>• Projects: Blog API, Task Manager</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-purple-500">
+                            <h4 class="font-semibold text-purple-800 mb-2">Phase 3: Backend Architecture (Weeks 12-18)</h4>
+                            <ul class="text-xs space-y-1 text-gray-700">
+                                <li>• Advanced Flask, authentication, security</li>
+                                <li>• PostgreSQL, caching, performance</li>
+                                <li>• Projects: E-commerce API, Social Media API</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-orange-500">
+                            <h4 class="font-semibold text-orange-800 mb-2">Phase 4: Production Ready (Weeks 19-26)</h4>
+                            <ul class="text-xs space-y-1 text-gray-700">
+                                <li>• Testing, Docker, CI/CD</li>
+                                <li>• Cloud deployment, monitoring</li>
+                                <li>• Message queues, background jobs</li>
+                                <li>• Projects: Microservices, Complete System</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-red-500">
+                            <h4 class="font-semibold text-red-800 mb-2">Phase 5: Job Preparation (Weeks 27-29)</h4>
+                            <ul class="text-xs space-y-1 text-gray-700">
+                                <li>• Portfolio refinement</li>
+                                <li>• Interview preparation</li>
+                                <li>• Open source contributions</li>
+                                <li>• Advanced specializations</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Progress Bar -->
+            <div class="mb-3 bg-gray-200 rounded-full h-6 overflow-hidden shadow-inner relative">
+                <div class="bg-gradient-to-r from-green-500 to-emerald-400 h-full transition-all duration-500 ease-out" id="progressFill" style="width: 0%;"></div>
+                <div class="absolute inset-0 flex items-center justify-center text-gray-800 font-bold text-sm z-10" id="progressText">
+                    0% Complete
+                </div>
+            </div>
+            
+            <!-- Calendar Grid -->
+            <div class="grid grid-cols-7 gap-px bg-gray-300 rounded-xl overflow-hidden shadow-lg mb-3" id="calendarGrid">
+                <!-- Calendar will be generated by JavaScript -->
+            </div>
+            
+            <!-- Statistics -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-2">
+                <div class="bg-white p-2.5 rounded-xl shadow-lg text-center border-t-4 border-blue-500 hover:shadow-xl transition-shadow duration-300">
+                    <div class="text-lg md:text-xl font-bold text-slate-800 mb-0.5">203</div>
+                    <div class="text-gray-600 font-medium text-[10px]">Total Days</div>
+                </div>
+                <div class="bg-white p-2.5 rounded-xl shadow-lg text-center border-t-4 border-orange-500 hover:shadow-xl transition-shadow duration-300">
+                    <div class="text-lg md:text-xl font-bold text-slate-800 mb-0.5">9</div>
+                    <div class="text-gray-600 font-medium text-[10px]">Milestone Projects</div>
+                </div>
+                <div class="bg-white p-2.5 rounded-xl shadow-lg text-center border-t-4 border-green-500 hover:shadow-xl transition-shadow duration-300">
+                    <div class="text-lg md:text-xl font-bold text-slate-800 mb-0.5">5</div>
+                    <div class="text-gray-600 font-medium text-[10px]">Learning Phases</div>
+                </div>
+                <div class="bg-white p-2.5 rounded-xl shadow-lg text-center border-t-4 border-purple-500 hover:shadow-xl transition-shadow duration-300">
+                    <div class="text-lg md:text-xl font-bold text-slate-800 mb-0.5" id="completedTasks">0</div>
+                    <div class="text-gray-600 font-medium text-[10px]">Days Completed</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const roadmapData = {
+            // Phase 1: Python Fundamentals (Weeks 1-6)
+            1: { 
+                phase: "Phase 1: Python Fundamentals", 
+                dailyTasks: [
+                    "Learn variables & data types", "Practice with numbers & strings", "Control structures (if/else)", 
+                    "Loops and iterations", "Functions basics", "Function parameters & return", "Collections: Lists"
+                ],
+                milestone: "Project 1: CLI Calculator" 
+            },
+            2: { 
+                phase: null, 
+                dailyTasks: [
+                    "Collections: Tuples & Sets", "Dictionaries & key-value pairs", "String manipulation", 
+                    "List comprehensions", "Error handling basics", "File I/O operations", "Practice exercises"
+                ],
+                milestone: null
+            },
+            3: { 
+                phase: null, 
+                dailyTasks: [
+                    "OOP: Classes & objects", "Methods & attributes", "Inheritance basics", 
+                    "Polymorphism concepts", "Encapsulation", "Special methods", "OOP practice"
+                ],
+                milestone: "Project 2: Finance Tracker"
+            },
+            4: { 
+                phase: null, 
+                dailyTasks: [
+                    "Modules & packages", "Import statements", "JSON handling", 
+                    "CSV file operations", "Exception handling", "Try/except blocks", "Custom exceptions"
+                ],
+                milestone: null
+            },
+            5: { 
+                phase: null, 
+                dailyTasks: [
+                    "Virtual environments", "pip & package management", "Code formatting (PEP 8)", 
+                    "Code linting", "Basic testing", "unittest framework", "Test-driven development"
+                ],
+                milestone: null
+            },
+            6: { 
+                phase: null, 
+                dailyTasks: [
+                    "Git basics", "Repository creation", "Commits & branches", 
+                    "Merging & conflicts", "GitHub workflow", "Documentation", "Code reviews"
+                ],
+                milestone: "Project 3: Library System"
+            },
+            
+            // Phase 2: Web Development Foundations (Weeks 7-11)
+            7: { 
+                phase: "Phase 2: Web Foundations", 
+                dailyTasks: [
+                    "HTTP protocol basics", "Request & response cycle", "HTTP methods (GET, POST)", 
+                    "Status codes", "Headers & cookies", "REST principles", "API design"
+                ],
+                milestone: null
+            },
+            8: { 
+                phase: null, 
+                dailyTasks: [
+                    "JSON format", "API testing with Postman", "Web servers intro", 
+                    "Client-server architecture", "URL structure", "Query parameters", "API documentation"
+                ],
+                milestone: null
+            },
+            9: { 
+                phase: null, 
+                dailyTasks: [
+                    "Flask installation", "First Flask app", "Routes & decorators", 
+                    "View functions", "Request object", "Response handling", "Debug mode"
+                ],
+                milestone: null
+            },
+            10: { 
+                phase: null, 
+                dailyTasks: [
+                    "Templates with Jinja2", "Template inheritance", "Static files", 
+                    "Forms handling", "Flask extensions", "Error handling", "Configuration"
+                ],
+                milestone: "Project 4: Blog API"
+            },
+            11: { 
+                phase: null, 
+                dailyTasks: [
+                    "SQL basics", "Database design", "SQLite setup", 
+                    "SQLAlchemy ORM", "Models & relationships", "Migrations", "Database queries"
+                ],
+                milestone: "Project 5: Task Manager API"
+            },
+            
+            // Phase 3: Backend Architecture (Weeks 12-18)
+            12: { 
+                phase: "Phase 3: Backend Architecture", 
+                dailyTasks: [
+                    "Flask Blueprints", "Application structure", "Middleware concepts", 
+                    "Decorators advanced", "Request hooks", "Application context", "Error handlers"
+                ],
+                milestone: null
+            },
+            13: { 
+                phase: null, 
+                dailyTasks: [
+                    "Input validation", "Marshmallow schemas", "Pagination techniques", 
+                    "Filtering & sorting", "File uploads", "Image processing", "API versioning"
+                ],
+                milestone: null
+            },
+            14: { 
+                phase: null, 
+                dailyTasks: [
+                    "Authentication basics", "Session management", "JWT tokens", 
+                    "Password hashing", "bcrypt library", "User registration", "Login systems"
+                ],
+                milestone: null
+            },
+            15: { 
+                phase: null, 
+                dailyTasks: [
+                    "Role-based access", "Authorization decorators", "CORS handling", 
+                    "Security headers", "Environment variables", "Configuration management", "Secrets handling"
+                ],
+                milestone: "Project 6: E-commerce API"
+            },
+            16: { 
+                phase: null, 
+                dailyTasks: [
+                    "PostgreSQL setup", "Advanced SQL queries", "Joins & subqueries", 
+                    "Database indexing", "Query optimization", "Performance analysis", "Database design patterns"
+                ],
+                milestone: null
+            },
+            17: { 
+                phase: null, 
+                dailyTasks: [
+                    "Transactions & ACID", "Connection pooling", "Database migrations", 
+                    "Backup strategies", "Database monitoring", "Performance tuning", "Scaling strategies"
+                ],
+                milestone: null
+            },
+            18: { 
+                phase: null, 
+                dailyTasks: [
+                    "Redis installation", "Caching strategies", "Cache patterns", 
+                    "Rate limiting", "Performance monitoring", "Load testing", "Optimization techniques"
+                ],
+                milestone: "Project 7: Social Media API"
+            },
+            
+            // Phase 4: Production & Advanced (Weeks 19-26)
+            19: { 
+                phase: "Phase 4: Production Ready", 
+                dailyTasks: [
+                    "pytest framework", "Unit test writing", "Test fixtures", 
+                    "Mocking & patching", "Integration tests", "Test coverage", "TDD practices"
+                ],
+                milestone: null
+            },
+            20: { 
+                phase: null, 
+                dailyTasks: [
+                    "API testing", "Load testing", "Performance testing", 
+                    "Test automation", "Continuous testing", "Quality metrics", "Bug tracking"
+                ],
+                milestone: null
+            },
+            21: { 
+                phase: null, 
+                dailyTasks: [
+                    "Docker basics", "Containerization", "Dockerfile creation", 
+                    "Docker Compose", "Multi-container apps", "Volume management", "Network configuration"
+                ],
+                milestone: null
+            },
+            22: { 
+                phase: null, 
+                dailyTasks: [
+                    "CI/CD concepts", "GitHub Actions", "Pipeline creation", 
+                    "Automated testing", "Deployment automation", "Logging setup", "Monitoring basics"
+                ],
+                milestone: "Project 8: Microservices"
+            },
+            23: { 
+                phase: null, 
+                dailyTasks: [
+                    "Cloud platforms intro", "AWS/GCP basics", "Database hosting", 
+                    "RDS/Cloud SQL", "Load balancers", "Auto-scaling", "Cloud storage"
+                ],
+                milestone: null
+            },
+            24: { 
+                phase: null, 
+                dailyTasks: [
+                    "Domain management", "SSL certificates", "CDN setup", 
+                    "Environment management", "Production configs", "Security best practices", "Monitoring setup"
+                ],
+                milestone: null
+            },
+            25: { 
+                phase: null, 
+                dailyTasks: [
+                    "Message queues", "Celery setup", "Background tasks", 
+                    "Job scheduling", "Task monitoring", "Error handling", "Queue management"
+                ],
+                milestone: null
+            },
+            26: { 
+                phase: null, 
+                dailyTasks: [
+                    "API versioning", "Production migrations", "Health checks", 
+                    "Alerting systems", "Performance monitoring", "Incident response", "Documentation"
+                ],
+                milestone: "Final Project: Complete System"
+            },
+            
+            // Phase 5: Job Preparation (Weeks 27-29)
+            27: { 
+                phase: "Phase 5: Job Preparation", 
+                dailyTasks: [
+                    "Portfolio review", "README optimization", "Code documentation", 
+                    "Project deployment", "Demo preparation", "GitHub profile", "Personal branding"
+                ],
+                milestone: null
+            },
+            28: { 
+                phase: null, 
+                dailyTasks: [
+                    "System design study", "Interview questions", "Coding challenges", 
+                    "Open source contributions", "Technical blog writing", "Networking", "Job applications"
+                ],
+                milestone: null
+            },
+            29: { 
+                phase: null, 
+                dailyTasks: [
+                    "Advanced specialization", "GraphQL/FastAPI", "Machine learning integration", 
+                    "Blockchain concepts", "Microservices patterns", "Career planning", "Future learning path"
+                ],
+                milestone: "Portfolio Complete!"
+            }
+        };
+
+        let currentDate = new Date();
+        let startDate = new Date(); // Today's date as start
+        currentDate.setDate(1); // Start viewing from the 1st of current month
+        let completedDays = new Set(); // Track completed individual days instead of weeks
+
+        // Load completed days from localStorage on page load
+        function loadProgress() {
+            const saved = localStorage.getItem('pythonRoadmapProgress');
+            if (saved) {
+                completedDays = new Set(JSON.parse(saved));
+            }
+        }
+
+        // Save completed days to localStorage
+        function saveProgress() {
+            localStorage.setItem('pythonRoadmapProgress', JSON.stringify([...completedDays]));
+        }
+
+        function generateCalendar() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            const today = new Date();
+            
+            // Update month display
+            const monthNames = ["January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"];
+            document.getElementById('currentMonth').textContent = `${monthNames[month]} ${year}`;
+            
+            // Get first day of month and number of days
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const daysInMonth = lastDay.getDate();
+            const startingDayOfWeek = firstDay.getDay();
+            
+            const grid = document.getElementById('calendarGrid');
+            grid.innerHTML = '';
+            
+            // Add day headers
+            const dayHeaders = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            dayHeaders.forEach(day => {
+                const header = document.createElement('div');
+                header.className = 'bg-slate-700 text-white p-4 text-center font-semibold text-sm';
+                header.textContent = day;
+                grid.appendChild(header);
+            });
+            
+            // Add empty cells for days before month starts
+            for (let i = 0; i < startingDayOfWeek; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.className = 'bg-white min-h-[70px]';
+                grid.appendChild(emptyCell);
+            }
+            
+            // Add days of the month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const cell = document.createElement('div');
+                const cellDate = new Date(year, month, day);
+                const dayOfWeek = cellDate.getDay();
+                
+                cell.className = 'bg-white min-h-[70px] p-1.5 cursor-pointer transition-all duration-300 hover:bg-gray-50 hover:scale-[1.02] hover:shadow-md';
+                if (dayOfWeek === 0 || dayOfWeek === 6) {
+                    cell.className += ' bg-gray-50';
+                }
+                
+                // Check if this is today
+                if (cellDate.toDateString() === today.toDateString()) {
+                    cell.className += ' border-4 border-red-500 bg-red-50';
+                }
+                
+                // Calculate week number from start date - fix the off-by-one issue
+                const diffTime = cellDate - startDate;
+                const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+                const weekNumber = Math.floor(diffDays / 7) + 1;
+                
+                // Adjust for starting date - if today is the 20th, it should be week 1 day 0
+                const dayInWeek = diffDays % 7;
+                
+                const dayNumber = document.createElement('div');
+                dayNumber.className = 'font-semibold text-sm text-slate-800 mb-1';
+                dayNumber.textContent = day;
+                cell.appendChild(dayNumber);
+                
+                const dayContent = document.createElement('div');
+                dayContent.className = 'text-[10px] leading-tight space-y-0.5';
+                
+                // Add roadmap content if this week has content and is in future or current week
+                if (weekNumber >= 1 && weekNumber <= 29 && diffDays >= 0 && roadmapData[weekNumber]) {
+                    const data = roadmapData[weekNumber];
+                    
+                    // Create unique day ID for tracking completion
+                    const dayId = `${year}-${month}-${day}`;
+                    
+                    // Add phase start indicator
+                    if (data.phase) {
+                        const phaseDiv = document.createElement('div');
+                        phaseDiv.className = 'bg-green-100 text-green-800 px-1.5 py-0.5 rounded mb-0.5 border-l-2 border-green-500 font-semibold text-[9px]';
+                        phaseDiv.textContent = `Week ${weekNumber}`;
+                        dayContent.appendChild(phaseDiv);
+                    }
+                    
+                    // Add daily tasks - one task per day
+                    if (data.dailyTasks && dayInWeek >= 0 && dayInWeek < 7) {
+                        const taskIndex = Math.min(dayInWeek, data.dailyTasks.length - 1);
+                        const task = data.dailyTasks[taskIndex];
+                        if (task) {
+                            const taskDiv = document.createElement('div');
+                            taskDiv.className = 'bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded mb-0.5 border-l-2 border-blue-500 font-medium text-[9px] cursor-pointer hover:bg-blue-200 transition-colors';
+                            taskDiv.textContent = task;
+                            dayContent.appendChild(taskDiv);
+                        }
+                    }
+                    
+                    // Add milestone on Sunday (end of week)
+                    if (data.milestone && dayInWeek === 6) {
+                        const milestoneDiv = document.createElement('div');
+                        milestoneDiv.className = 'bg-orange-100 text-orange-800 px-1.5 py-0.5 rounded mb-0.5 border-l-2 border-orange-500 font-semibold text-[9px] cursor-pointer hover:bg-orange-200 transition-colors';
+                        milestoneDiv.textContent = data.milestone;
+                        dayContent.appendChild(milestoneDiv);
+                    }
+                    
+                    // Check if this day is completed and apply styling
+                    if (completedDays.has(dayId)) {
+                        cell.classList.add('bg-green-50', 'border-2', 'border-green-400');
+                        cell.style.opacity = '0.8';
+                        // Add checkmark
+                        const checkmark = document.createElement('div');
+                        checkmark.className = 'absolute top-1 right-1 text-green-600 font-bold text-xs';
+                        checkmark.textContent = '✓';
+                        cell.style.position = 'relative';
+                        cell.appendChild(checkmark);
+                    }
+                    
+                    // Set click handler for the entire day cell
+                    cell.onclick = () => toggleDayComplete(dayId, cell, weekNumber);
+                }
+                
+                cell.appendChild(dayContent);
+                grid.appendChild(cell);
+            }
+            
+            updateProgress();
+        }
+
+        function toggleCurriculum() {
+            const panel = document.getElementById('curriculumPanel');
+            if (panel.classList.contains('hidden')) {
+                panel.classList.remove('hidden');
+                panel.classList.add('animate-slide-down');
+            } else {
+                panel.classList.add('hidden');
+                panel.classList.remove('animate-slide-down');
+            }
+        }
+
+        function toggleDayComplete(dayId, cell, weekNumber) {
+            if (weekNumber > 29 || weekNumber < 1) return;
+            
+            if (completedDays.has(dayId)) {
+                // Uncomplete the day
+                completedDays.delete(dayId);
+                cell.classList.remove('bg-green-50', 'border-2', 'border-green-400');
+                cell.style.opacity = '1';
+                
+                // Remove checkmark
+                const checkmark = cell.querySelector('.absolute');
+                if (checkmark) {
+                    checkmark.remove();
+                }
+            } else {
+                // Complete the day
+                completedDays.add(dayId);
+                cell.classList.add('bg-green-50', 'border-2', 'border-green-400');
+                cell.style.opacity = '0.8';
+                
+                // Add checkmark
+                const checkmark = document.createElement('div');
+                checkmark.className = 'absolute top-1 right-1 text-green-600 font-bold text-xs';
+                checkmark.textContent = '✓';
+                cell.style.position = 'relative';
+                cell.appendChild(checkmark);
+            }
+            
+            // Save progress to localStorage
+            saveProgress();
+            updateProgress();
+        }
+
+        function updateProgress() {
+            // Calculate total learning days (29 weeks × 7 days = 203 days)
+            const totalLearningDays = 29 * 7;
+            const progress = (completedDays.size / totalLearningDays) * 100;
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+            const completedTasks = document.getElementById('completedTasks');
+            
+            // Update progress bar width
+            progressFill.style.width = `${progress}%`;
+            
+            // Update progress text that's always visible
+            if (progress === 100) {
+                progressText.textContent = '🎉 100% Complete - You\'re a Python Backend Developer!';
+                progressText.className = 'absolute inset-0 flex items-center justify-center text-yellow-800 font-bold text-sm z-10';
+            } else {
+                progressText.textContent = `${Math.round(progress)}% Complete`;
+                progressText.className = 'absolute inset-0 flex items-center justify-center text-gray-800 font-bold text-sm z-10';
+            }
+            
+            // Change progress bar color based on completion
+            if (progress === 100) {
+                progressFill.className = 'bg-gradient-to-r from-yellow-400 to-orange-500 h-full transition-all duration-500 ease-out';
+            } else if (progress >= 75) {
+                progressFill.className = 'bg-gradient-to-r from-blue-500 to-purple-500 h-full transition-all duration-500 ease-out';
+            } else if (progress >= 50) {
+                progressFill.className = 'bg-gradient-to-r from-indigo-500 to-blue-500 h-full transition-all duration-500 ease-out';
+            } else {
+                progressFill.className = 'bg-gradient-to-r from-green-500 to-emerald-400 h-full transition-all duration-500 ease-out';
+            }
+            
+            completedTasks.textContent = completedDays.size;
+        }
+
+        function previousMonth() {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            generateCalendar();
+        }
+
+        function nextMonth() {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            generateCalendar();
+        }
+
+        // Initialize calendar
+        loadProgress(); // Load saved progress first
+        generateCalendar();
+        
+        // Auto-advance to next month periodically
+        setInterval(() => {
+            const now = new Date();
+            if (now.getMonth() !== currentDate.getMonth() || now.getFullYear() !== currentDate.getFullYear()) {
+                currentDate = new Date(now);
+                generateCalendar();
+            }
+        }, 86400000); // Check daily
+    </script>
+</body>
+</html>
